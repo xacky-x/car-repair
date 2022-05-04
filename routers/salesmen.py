@@ -22,7 +22,7 @@ async def get_me(token: str = Depends(utils.oauth2_scheme), db: Session = Depend
     phone = sub.split(',')[0]
     db = crud.get_user_by_phone(db, phone=phone)
     if db is None:
-        raise HTTPException(status_code=404, detail="Client not found")
+        raise HTTPException(status_code=404, detail="业务员信息不存在")
     return db
 
 @router.get("/get_all", response_model=List[schemas.Client])
@@ -36,7 +36,7 @@ async def get_client(phone: str, db: Session = Depends(dependencies.get_db)):
     """根据手机号获取顾客信息"""
     db_client = crud.get_client_by_phone(db, phone = phone)
     if db_client is None:
-        raise HTTPException(status_code=404, detail="Client not found")
+        raise HTTPException(status_code=404, detail="顾客不存在")
     return db_client
 
 @router.post("/create_client", response_model=schemas.Client)
