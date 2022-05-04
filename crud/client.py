@@ -59,7 +59,7 @@ def authenticate_client(db: Session, phone: str, password: str):
         return False
     return client
 
-
+# 更改客户车辆信息
 def create_client_vehicle(db: Session, vehicle: schemas.VehicleCreate, c_id: int, token: str = Depends(utils.oauth2_scheme)):
     db_vehicle = models.Vehicle(
         license=vehicle.license,
@@ -72,3 +72,16 @@ def create_client_vehicle(db: Session, vehicle: schemas.VehicleCreate, c_id: int
     db.commit()
     db.refresh(db_vehicle)
     return db_vehicle
+
+#删除客户
+def remove_client_by_id(db: Session, c_id: int):
+    db_client = db.query(models.Client).filter(models.Client.c_id == c_id).first()
+    if db_client:
+        db.delete(db_client)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+#新增客户

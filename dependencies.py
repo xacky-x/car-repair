@@ -38,15 +38,17 @@ def verify_administrator(sub: str = Depends(verify_token)):
 
 
 def verify_salesman(sub: str = Depends(verify_token)):
+    is_administrator = sub.split(',')[1]
     is_maintenance = sub.split(',')[2]
-    if is_maintenance == 'True':
+    if is_administrator == 'True' or is_maintenance == 'True':
         raise HTTPException(status_code=401, detail="非业务员权限")
 
 
 def verify_maintenance(sub: str = Depends(verify_token)):
+    is_administrator = sub.split(',')[1]
     is_maintenance = sub.split(',')[2]
-    if is_maintenance == 'False':
-        raise HTTPException(status_code=401, detail="非维修员权限")
+    if is_administrator == 'True' or is_maintenance == 'False':
+        raise HTTPException(status_code=401, detail="非业务员权限")
 
 
 if __name__ == '__main__':
