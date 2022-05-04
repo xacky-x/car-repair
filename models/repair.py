@@ -3,7 +3,7 @@
 # @Author  : Cetacean
 # @File    : repair.py
 
-from sqlalchemy import Column, Integer, String, Float, Date, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Date, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -19,7 +19,7 @@ class Repair(Base):
     payment = Column(String(20), comment="结算方式")
     mileage = Column(Float, comment="进场里程数")
     fuel = Column(Float, comment="进场油量")
-    approach_time = Column(Date, comment="进场时间")
+    approach_time = Column(DateTime, comment="进场时间")
     failure = Column(Text, comment="故障描述")
     completion_time = Column(Date, comment="预计完工时间")
     date = Column(Date, comment="登记日期")
@@ -29,4 +29,3 @@ class Repair(Base):
 
     r_client = relationship('Client', back_populates='c_repair')
     r_vehicle = relationship('Vehicle', back_populates='v_repair')
-
