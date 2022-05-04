@@ -14,7 +14,6 @@ router = APIRouter(
 )
 
 
-
 @router.get("/get_by_id/{c_id}", response_model=schemas.Client)
 async def get_client(c_id: int, db: Session = Depends(get_db)):
     db_client = crud.get_client_by_id(db, c_id=c_id)

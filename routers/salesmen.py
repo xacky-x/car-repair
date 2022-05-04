@@ -54,20 +54,22 @@ async def create_client(client: schemas.ClientCreate, db: Session = Depends(depe
 @router.post("/create_vehicle/{c_id}/", response_model=schemas.Vehicle)
 async def create_client_vehicle(c_id: int, vehicle: schemas.VehicleCreate, db: Session = Depends(dependencies.get_db)):
     """新增客户车辆信息"""
-    db_client = crud.get_client_by_id(db, c_id = c_id)
+    db_client = crud.get_client_by_id(db, c_id=c_id)
     if db_client is None:
         raise HTTPException(status_code=404, detail="顾客不存在")
     return crud.create_client_vehicle(db=db, vehicle=vehicle, c_id=c_id)
 
-@router.delete("/delvehicle/{c_id}/{v_id}",response_model=schemas.Client)
-async def delete_vehicle(c_id:int,v_id:int,db:Session=Depends(dependencies.get_db)):
+
+@router.delete("/delvehicle/{c_id}/{v_id}", response_model=schemas.Client)
+async def delete_vehicle(c_id: int, v_id: int, db: Session = Depends(dependencies.get_db)):
     """删除客户车辆信息"""
     db_client = crud.get_client_by_id(db, c_id=c_id)
     if db_client is None:
         raise HTTPException(status_code=404, detail="顾客不存在")
-    res = crud.remove_vehicle_by_id(db,v_id=v_id,c_id=c_id)
+    res = crud.remove_vehicle_by_id(db, v_id=v_id, c_id=c_id)
     if res is False:
         raise HTTPException(status_code=404, detail="车辆不存在")
+
 
 @router.delete("/del_by_id/{c_id}", response_model=schemas.Client)
 async def delete_client(c_id: int, db: Session = Depends(dependencies.get_db)):
@@ -77,13 +79,53 @@ async def delete_client(c_id: int, db: Session = Depends(dependencies.get_db)):
         raise HTTPException(status_code=404, detail="顾客不存在")
 
 
+@router.post("/create_random_repair", response_model=List[schemas.Repair])
+async def create_random_repair(num: int, db: Session = Depends(dependencies.get_db)):
+    """随机创建维修单"""
+    return crud.create_random_repair(db=db, num=num)
+
+
+@router.post("/create_repair", response_model=schemas.RepairCreate)
+async def create_repair(repair: schemas.RepairCreate, db: Session = Depends(dependencies.get_db)):
+    """创建维修单信息"""
+    # db_repair = crud.get_repair_by_cv(db, s_id=repair.s_id, v_id=repair.v_id)
+    # if db_repair:
+    #     raise HTTPException(status_code=400, detail="维修单已创建")
+    return crud.create_repair(db=db, repair=repair)
+
+
 @router.get("/get_all_repair", response_model=List[schemas.Repair])
 async def get_all_repair(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
+    """获取所有维修单"""
     all_repair = crud.get_all_repair(db, skip=skip, limit=limit)
     print(all_repair)
     return all_repair
 
 
-@router.post("/create_random_repair", response_model=List[schemas.Repair])
-async def create_random_repair(num: int, db: Session = Depends(dependencies.get_db)):
-    return crud.create_random_repair(db=db, num=num)
+@router.get("/get_repair_by_type/{type}", response_model=schemas.Repair)
+async def get_repair_by_type(type: str, db: Session = Depends(dependencies.get_db)):
+    """根据类型获取维修单"""
+    db_repair = crud.get_repair_by_type(db, type=type)
+    if db_repair is None:
+        raise HTTPException(status_code=404, detail="维修单不存在")
+    return db_repair
+
+
+@router.get("/get_repair_by_id/{id}", response_model=schemas.Repair)
+async def get_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
+    """根据id获取维修单"""
+    db_repair = crud.get_repair_by_id(db, id=id)
+    if db_repair is None:
+        raise HTTPException(status_code=404, detail="维修单不存在")
+    return db_repair
+
+
+@router.delete("/del_repair_by_id/{r_id}", response_model=schemas.Repair)
+async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
+    """删除维修单"""
+    db_repair = crud.get_repair_by_id(db, id=id)
+    print(db_repair)
+    if db_repair is None:
+        raise HTTPException(status_code=404, detail="维修单不存在")
+    crud.remove_repair_by_id(db, r_id=id)
+    return "维修单删除成功"

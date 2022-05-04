@@ -8,7 +8,6 @@ from pydantic import BaseModel
 
 
 class RepairCreate(BaseModel):
-    r_id: int
     r_type: str
     r_class: str
     payment: str
@@ -19,6 +18,8 @@ class RepairCreate(BaseModel):
     completion_time: date
     date: date
     cost: float
+    # v_id: int
+    # s_id: int
 
 
 class Repair(BaseModel):

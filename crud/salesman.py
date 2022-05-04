@@ -50,41 +50,40 @@ def create_random_repair(db: Session, num: int):
 
 def get_repair_by_type(db: Session, type: str):
     # 根据维修单类型查询
-    return db.query(models.Repair).filter(models.Repair.type == type).first()
+    return db.query(models.Repair).filter(models.Repair.r_type == type).first()
 
 
-def get_repair_by_id(db: Session, id: str):
+def get_repair_by_id(db: Session, id: int):
     # 根据维修单id查询对应维修单具体信息
-    return db.query(models.Repair).filter(models.Repair.id == id).first()
+    return db.query(models.Repair).filter(models.Repair.r_id == id).first()
 
 
-def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
-    # 更新维修单里的数据
-    db_repair = models.Repair(
-        r_id=r_id,
-        r_type=repair.r_type,
-        r_class=repair.r_class,
-        payment=repair.payment,
-        mileage=repair.mileage,
-        fuel=repair.fuel,
-        approach_time=repair.approach_time,
-        failure=repair.failure,
-        completion_time=repair.completion_time,
-        date=repair.date,
-        cost=repair.cost,
-        v_id=repair.v_id,
-        s_id=repair.s_id
-    )
+def get_repair_by_cv(db: Session, s_id: int, v_id: int):
+    # 根据用户id和车辆id获取对应维修单
+    return db.query(models.Repair).filter(models.Repair.s_id == s_id and models.Repair.v_id == v_id).first()
 
-    db.add(db_repair)
-    db.commit()
-    db.refresh(db_repair)
-    return db_repair
+
+# def create_repair(db: Session, repair: schemas.RepairCreate):
+#     # 创建维修单
+#     db_repair = models.Repair(**repair.dict())
+#     db.add(db_repair)
+#     db.commit()
+#     db.refresh(db_repair)
+#     return db_repair
+
+
+# def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
+#     # 新建维修单
+#
+#     db.add(db_repair)
+#     db.commit()
+#     db.refresh(db_repair)
+#     return db_repair
 
 
 def remove_repair_by_id(db: Session, r_id: int):
     # 删除维修单
-    db_repair = db.query(models.Client).filter(models.Repair.r_id == r_id).first()
+    db_repair = db.query(models.Repair).filter(models.Repair.r_id == r_id).first()
     if db_repair:
         db.delete(db_repair)
     else:
