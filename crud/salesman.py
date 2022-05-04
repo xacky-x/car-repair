@@ -15,3 +15,7 @@ def get_salesmen(db: Session, skip: int = 0, limit: int = 100):
 
 def get_all_repair(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Repair).offset(skip).limit(limit).all()
+
+
+def create_repair(db: Session, repair):
+    pass

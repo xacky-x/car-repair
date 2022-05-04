@@ -3,11 +3,12 @@
 # @Author  : Cetacean
 # @File    : repair.py
 
-from sqlalchemy import Column, Integer, String, Float, Date, Text,ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Date, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
 from database import Base
 import models
+
 
 class Repair(Base):
     __tablename__ = "repair"
@@ -26,8 +27,6 @@ class Repair(Base):
     s_id = Column(Integer, ForeignKey('client.c_id'), comment="业务员编号")
     v_id = Column(Integer, ForeignKey('vehicle.v_id'), comment="车架号")
 
-    r_client = relationship('Client',back_populates='c_repair')
-    r_vehicle = relationship('Vehicle',back_populates='v_repair')
+    r_client = relationship('Client', back_populates='c_repair')
+    r_vehicle = relationship('Vehicle', back_populates='v_repair')
 
-    def __repr__(self):
-        return f'{self.r_id}_{self.r_type}_{self.s_id}_{self.v_id}'
