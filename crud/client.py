@@ -37,7 +37,6 @@ def create_random_client(db: Session, num: int):
             c_name = name
             c_p = '个人'
         db_client = models.Client(
-            c_password=utils.get_password_hash("123"),
             c_name=c_name,
             c_p=c_p,
             discount=utils.random_discount(),
