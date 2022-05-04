@@ -14,10 +14,6 @@ router = APIRouter(
 )
 
 
-@router.post("/create_random", response_model=List[schemas.Client])
-async def create_client_random(num: int, db: Session = Depends(get_db)):
-    return crud.create_random_client(db=db, num=num)
-
 
 @router.get("/get_by_id/{c_id}", response_model=schemas.Client)
 async def get_client(c_id: int, db: Session = Depends(get_db)):
