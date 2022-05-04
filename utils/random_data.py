@@ -65,11 +65,11 @@ def random_vtype():
 
 def random_color():
     color_list=["红色","蓝色","黑色","灰色","白色","金色"]
-    return color_list
+    return random.choice(color_list)
 
 def random_vclass():
     vclass_list=["微型车","中型车","中大型车","小型车","豪华车"]
-    return vclass_list
+    return random.choice(vclass_list)
 
 if __name__ == '__main__':
     for i in range(10):
