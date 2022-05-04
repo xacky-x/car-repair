@@ -13,6 +13,7 @@ router = APIRouter(
     tags=["clients"]
 )
 
+
 @router.post("/create_random", response_model=List[schemas.Client])
 async def create_client_random(num: int, db: Session = Depends(get_db)):
     return crud.create_random_client(db=db, num=num)
@@ -24,5 +25,3 @@ async def get_client(c_id: int, db: Session = Depends(get_db)):
     if db_client is None:
         raise HTTPException(status_code=404, detail="Client not found")
     return db_client
-
-
