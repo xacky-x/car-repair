@@ -15,3 +15,4 @@ class Vehicle(Base):
     c_id = Column(Integer, ForeignKey("client.c_id"))
 
     owner = relationship("Client", back_populates="vehicles")
+    v_repair = relationship("Repair",back_populates="r_vehicle")

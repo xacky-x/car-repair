@@ -35,3 +35,7 @@ async def create_client(client: schemas.ClientCreate, db: Session = Depends(depe
     return crud.create_client(db=db, client=client)
 
 
+@router.get("/get_all_repair", response_model=List[schemas.Repair])
+async def get_all_repair(token: str = Depends(utils.oauth2_scheme), skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
+    all_repair = crud.get_all_repair(db, skip=skip, limit=limit)
+    return all_repair
