@@ -69,14 +69,6 @@ async def delete_vehicle(c_id:int,v_id:int,db:Session=Depends(dependencies.get_d
     if res is False:
         raise HTTPException(status_code=404, detail="车辆不存在")
 
-@router.delete("/del_by_id/{c_id}",response_model=schemas.Client)
-async def delete_client(c_id:int,db:Session=Depends(dependencies.get_db)):
-    db_vehicle = crud.get_vehicles_by_id(db, c_id=c_id)
-    if db_vehicle:
-        raise HTTPException(status_code=400, detail="车辆已存在")
-    return crud.create_client_vehicle(db=db, vehicle=vehicle, c_id=c_id)
-
-
 @router.delete("/del_by_id/{c_id}", response_model=schemas.Client)
 async def delete_client(c_id: int, db: Session = Depends(dependencies.get_db)):
     """删除客户信息"""
