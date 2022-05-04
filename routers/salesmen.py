@@ -84,3 +84,6 @@ async def get_all_repair(skip: int = 0, limit: int = 100, db: Session = Depends(
     return all_repair
 
 
+@router.post("/create_random_repair", response_model=List[schemas.Repair])
+async def create_random_repair(num: int, db: Session = Depends(dependencies.get_db)):
+    return crud.create_random_repair(db=db, num=num)

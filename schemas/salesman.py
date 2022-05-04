@@ -3,7 +3,7 @@
 # @Author  : Cetacean
 # @File    : salesman.py
 from typing import List, Optional
-from datetime import date
+from datetime import date, datetime
 from pydantic import BaseModel
 
 
@@ -14,7 +14,7 @@ class RepairCreate(BaseModel):
     payment: str
     mileage: float
     fuel: float
-    approach_time: date
+    approach_time: datetime
     failure: str
     completion_time: date
     date: date
@@ -28,7 +28,7 @@ class Repair(BaseModel):
     payment: str
     mileage: float
     fuel: float
-    approach_time: date
+    approach_time: datetime
     failure: str
     completion_time: date
     date: date
