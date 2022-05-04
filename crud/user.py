@@ -12,6 +12,14 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
+def get_administrator(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).filter(models.User.is_administrator == "True").offset(skip).limit(limit).all()
+
+
+def get_salesman_and_maintenance(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).filter(models.User.is_administrator == "False").offset(skip).limit(limit).all()
+
+
 def get_user_by_phone(db: Session, phone: str):
     return db.query(models.User).filter(models.User.phone == phone).first()
 
