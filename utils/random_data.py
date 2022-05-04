@@ -1,6 +1,6 @@
 import random
 from faker import Faker
-from sqlalchemy import DateTime
+
 fake = Faker(locale='zh_CN')
 
 
@@ -40,6 +40,42 @@ def random_hour():
     return random.choice(hour_list)
 
 
+def random_license():
+    char0 = ["京", "津", "沪", "渝", "冀", "豫", "云", "辽", "黑", "湘", "皖", "鲁", "新", "苏", "浙", "赣", "鄂", "桂", "甘", "晋", "蒙",
+             "陕", "吉", "闽", "赣", "粤", "青", "藏", "川", "宁", "琼"]  # 省份简称
+    char1 = 'ABCDEFGHJKLMNPQRSTUVWXYZ'  # 车牌号中没有I和O
+    char2 = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'
+
+    id_1 = random.choice(char0)  # 车牌号第一位     省份简称
+    id_2 = ''.join(random.sample(char1, 1))  # 车牌号第二位
+
+    while True:
+        id_3 = ''.join(random.sample(char2, 5))
+        v = id_3.isalpha()  # 所有字符都是字母时返回 true
+        if v == True:
+            continue
+        else:
+            car_id = id_1 + id_2 + id_3
+            break
+
+    return car_id
+
+
+def random_vtype():
+    vtype_list = ["SUV", "MPV", "HATCHBACK", "COUPE", "ROADSTER"]
+    return random.choice(vtype_list)
+
+
+def random_color():
+    color_list = ["红色", "蓝色", "黑色", "灰色", "白色", "金色"]
+    return random.choice(color_list)
+
+
+def random_vclass():
+    vclass_list = ["微型车", "中型车", "中大型车", "小型车", "豪华车"]
+    return random.choice(vclass_list)
+
+
 # 维修表的假数据
 def random_r_type():
     type_list = ['普通', '加急']
@@ -61,7 +97,7 @@ def random_mileage():
 
 
 def random_fuel():
-    return round(random.uniform(0,1), 2)
+    return round(random.uniform(0, 1), 2)
 
 
 def random_approach_time():

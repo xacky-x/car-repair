@@ -16,3 +16,4 @@ router = APIRouter(
 async def get_vehicles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     vehicles = crud.get_vehicles(db, skip=skip, limit=limit)
     return vehicles
+

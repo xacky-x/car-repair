@@ -42,7 +42,17 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@router.post("/create_random", response_model=List[schemas.User])
+@router.post("/create_random_user", response_model=List[schemas.User])
 async def create_user_random(num: int, db: Session = Depends(get_db)):
     """随机生成用户"""
     return crud.create_random_user(db=db, num=num)
+
+@router.post("/create_random_vehicle", response_model=List[schemas.Vehicle])
+async def create_vehicle_random(num: int, db: Session = Depends(get_db)):
+    """随机生成车辆"""
+    return crud.create_random_vehicle(db=db, num=num)
+
+@router.post("/create_random_client", response_model=List[schemas.Client])
+async def create_client_random(num: int, db: Session = Depends(get_db)):
+    """随机生成客户"""
+    return crud.create_random_client(db=db, num=num)

@@ -14,7 +14,7 @@ class RepairCreate(BaseModel):
     payment: str
     mileage: float
     fuel: float
-    approach_time: date
+    approach_time: datetime
     failure: str
     completion_time: date
     date: date
