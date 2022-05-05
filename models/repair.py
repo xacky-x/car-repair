@@ -29,3 +29,5 @@ class Repair(Base):
 
     r_salesman = relationship('User', back_populates='s_repair')
     r_vehicle = relationship('Vehicle', back_populates='v_repair')
+
+    # __mapper_args__ = {"order_by": r_id}  # 默认正序，倒序加上desc()方法

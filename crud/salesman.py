@@ -91,19 +91,6 @@ def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
     return
 
 
-# def update_repair_by_id(db: Session, repair: schemas.RepairUpdate, r_id: int):
-#     # 更新维修单
-#     old_repair = db.query(models.Repair).filter(models.Repair.r_id == r_id)
-#     update_repair = repair.dict()
-#     for k in update_repair:
-#         if update_repair[k] is None:
-#             print(dict(old_repair)[k])
-#             # update_repair[k] = old_repair.k
-#     db.query(models.Repair).filter(models.Repair.r_id == r_id).update(repair.dict())
-#     db.commit()
-#     return
-
-
 def remove_repair_by_id(db: Session, r_id: int):
     # 删除维修单
     db_repair = db.query(models.Repair).filter(models.Repair.r_id == r_id).first()
