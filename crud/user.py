@@ -87,6 +87,7 @@ def authenticate_user(db: Session, phone: str, password: str):
     return user
 
 def create_project(db: Session, num: int):
+    #创建维修项目表
     db_project_list = []
     for i in range(num):
         db_project = models.Project(
@@ -98,3 +99,27 @@ def create_project(db: Session, num: int):
         db.refresh(db_project)
     return db_project_list
 
+def remove_project_by_id(db: Session, p_id: int):
+    # 删除维修项目表
+    db_project = db.query(models.Project).filter(models.Project.p_id == p_id).first()
+    if db_project:
+        db.delete(db_project)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+def get_project_by_id(db: Session, p_id: int):
+    # 根据id获取维修项目表
+    return db.query(models.Project).filter(models.Project.p_id == p_id).first()
+
+def get_projects(db: Session, skip: int = 0, limit: int = 100):
+    # 获取所有维修项目
+    return db.query(models.Project).offset(skip).limit(limit).all()
+
+def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
+    # 更新维修项目
+    db.query(models.Project).filter(models.Project.p_id == p_id).update(project.dict())
+    db.commit()
+    return

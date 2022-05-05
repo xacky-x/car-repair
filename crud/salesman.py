@@ -126,3 +126,7 @@ def remove_order_by_id(db: Session, o_id: int):
     db.commit()
     db.flush()
     return True
+
+def get_order_by_rid(db: Session,r_id:int):
+    #根据维修单获取派单信息
+    return db.query(models.Order).filter(models.Order.r_id==r_id).first()

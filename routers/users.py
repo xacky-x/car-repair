@@ -49,3 +49,22 @@ async def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(d
 async def create_project(num: int, db: Session = Depends(dependencies.get_db)):
     """随机创建维修项目表"""
     return crud.create_project(db=db, num=num)
+
+@router.get("/get_all_projects", response_model=List[schemas.Project])
+async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
+    """获取所有维修项目"""
+    projects = crud.get_projects(db, skip=skip, limit=limit)
+    return projects
+
+@router.put("/update_project_by_id/{p_id}", response_model=schemas.Project)
+async def update_project_by_id(p_id: int, project: schemas.ProjectCreate, db: Session = Depends(dependencies.get_db)):
+    """更新维修项目"""
+    updated_project = crud.update_project_by_id(db, project=project, p_id=p_id)
+    return updated_project
+
+@router.delete("/del_project_by_id/{p_id}", response_model=schemas.Project)
+async def delete_project(p_id: int, db: Session = Depends(dependencies.get_db)):
+    """删除维修项目"""
+    res = crud.remove_project_by_id(db, p_id=p_id)
+    if res is False:
+        raise HTTPException(status_code=404, detail="维修项目不存在")
