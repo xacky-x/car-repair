@@ -22,6 +22,21 @@ class RepairCreate(BaseModel):
     s_id: int
 
 
+class RepairUpdate(BaseModel):
+    r_type: Optional[str]
+    r_class: Optional[str]
+    payment: Optional[str]
+    mileage: Optional[float]
+    fuel: Optional[float]
+    approach_time: Optional[datetime]
+    failure: Optional[str]
+    completion_time: Optional[date]
+    date: Optional[date]
+    cost: Optional[float]
+    v_id: Optional[int]
+    s_id: Optional[int]
+
+
 class Repair(BaseModel):
     r_id: int
     r_type: str

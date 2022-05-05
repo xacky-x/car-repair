@@ -86,23 +86,22 @@ def get_repair_by_cv(db: Session, s_id: int, v_id: int):
 
 def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
     # 更新维修单
-    db_repair = db.query(models.Repair).filter(models.Repair.r_id == r_id).first()
-    db_repair.r_type = repair.r_type
-    db_repair.r_class = repair.r_class
-    db_repair.payment = repair.payment,
-    db_repair.mileage = repair.mileage,
-    db_repair.fuel = repair.fuel,
-    db_repair.approach_time = repair.approach_time,
-    db_repair.failure = repair.failure,
-    db_repair.completion_time = repair.completion_time,
-    db_repair.date = repair.date,
-    db_repair.cost = repair.cost,
-    db_repair.s_id = repair.s_id,
-    db_repair. v_id = repair.v_id
-
+    db.query(models.Repair).filter(models.Repair.r_id == r_id).update(repair.dict())
     db.commit()
-    db.refresh(db_repair)
-    return db_repair
+    return
+
+
+# def update_repair_by_id(db: Session, repair: schemas.RepairUpdate, r_id: int):
+#     # 更新维修单
+#     old_repair = db.query(models.Repair).filter(models.Repair.r_id == r_id)
+#     update_repair = repair.dict()
+#     for k in update_repair:
+#         if update_repair[k] is None:
+#             print(dict(old_repair)[k])
+#             # update_repair[k] = old_repair.k
+#     db.query(models.Repair).filter(models.Repair.r_id == r_id).update(repair.dict())
+#     db.commit()
+#     return
 
 
 def remove_repair_by_id(db: Session, r_id: int):
