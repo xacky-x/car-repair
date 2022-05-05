@@ -24,8 +24,8 @@ class Repair(Base):
     completion_time = Column(Date, comment="预计完工时间")
     date = Column(Date, comment="登记日期")
     cost = Column(Float, comment="费用")
-    s_id = Column(Integer, ForeignKey('client.c_id'), comment="业务员编号")
+    s_id = Column(Integer, ForeignKey('user.id'), comment="业务员编号")
     v_id = Column(Integer, ForeignKey('vehicle.v_id'), comment="车架号")
 
-    r_client = relationship('Client', back_populates='c_repair')
+    r_salesman = relationship('User', back_populates='s_repair')
     r_vehicle = relationship('Vehicle', back_populates='v_repair')

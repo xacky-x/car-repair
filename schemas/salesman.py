@@ -18,8 +18,8 @@ class RepairCreate(BaseModel):
     completion_time: date
     date: date
     cost: float
-    # v_id: int
-    # s_id: int
+    v_id: int
+    s_id: int
 
 
 class Repair(BaseModel):

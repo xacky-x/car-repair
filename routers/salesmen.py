@@ -79,18 +79,9 @@ async def delete_client(c_id: int, db: Session = Depends(dependencies.get_db)):
         raise HTTPException(status_code=404, detail="顾客不存在")
 
 
-@router.post("/create_random_repair", response_model=List[schemas.Repair])
-async def create_random_repair(num: int, db: Session = Depends(dependencies.get_db)):
-    """随机创建维修单"""
-    return crud.create_random_repair(db=db, num=num)
-
-
-@router.post("/create_repair", response_model=schemas.RepairCreate)
+@router.post("/create_repair", response_model=schemas.Repair)
 async def create_repair(repair: schemas.RepairCreate, db: Session = Depends(dependencies.get_db)):
     """创建维修单信息"""
-    # db_repair = crud.get_repair_by_cv(db, s_id=repair.s_id, v_id=repair.v_id)
-    # if db_repair:
-    #     raise HTTPException(status_code=400, detail="维修单已创建")
     return crud.create_repair(db=db, repair=repair)
 
 

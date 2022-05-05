@@ -28,9 +28,10 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token_expires = timedelta(minutes=utils.ACCESS_TOKEN_EXPIRE_MINUTES)
     sub = user.phone + "," + str(user.is_administrator) + "," + str(user.is_maintenance)
     access_token = utils.create_access_token(
-        data={"sub":  sub}, expires_delta=access_token_expires
+        data={"sub": sub}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer", "is_administrator": user.is_administrator, "is_maintenance": user.is_maintenance}
+    return {"access_token": access_token, "token_type": "bearer", "is_administrator": user.is_administrator,
+            "is_maintenance": user.is_maintenance}
 
 
 @router.post("/create", response_model=schemas.User)
@@ -47,12 +48,20 @@ async def create_user_random(num: int, db: Session = Depends(get_db)):
     """随机生成用户"""
     return crud.create_random_user(db=db, num=num)
 
+
 @router.post("/create_random_vehicle", response_model=List[schemas.Vehicle])
 async def create_vehicle_random(num: int, db: Session = Depends(get_db)):
     """随机生成车辆"""
     return crud.create_random_vehicle(db=db, num=num)
 
+
 @router.post("/create_random_client", response_model=List[schemas.Client])
 async def create_client_random(num: int, db: Session = Depends(get_db)):
     """随机生成客户"""
     return crud.create_random_client(db=db, num=num)
+
+
+@router.post("/create_random_repair", response_model=List[schemas.Repair])
+async def create_random_repair(num: int, db: Session = Depends(get_db)):
+    """随机创建维修单"""
+    return crud.create_random_repair(db=db, num=num)

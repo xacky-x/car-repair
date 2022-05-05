@@ -15,4 +15,3 @@ class Client(Base):
     phone = Column(String)
 
     vehicles = relationship("Vehicle", back_populates="owner")
-    c_repair = relationship('Repair', back_populates="r_client")

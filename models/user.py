@@ -15,3 +15,5 @@ class User(Base):
     m_hour = Column(Float)
     is_administrator = Column(Boolean, default=False)
     is_maintenance = Column(Boolean)
+
+    s_repair = relationship('Repair', back_populates="r_salesman")
