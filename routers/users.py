@@ -44,3 +44,8 @@ async def get_all_salesmen_and_maintenances(skip: int = 0, limit: int = 100, db:
 async def get_all_users(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
+
+@router.post("/create_project", response_model=List[schemas.Project])
+async def create_project(num: int, db: Session = Depends(dependencies.get_db)):
+    """随机创建维修项目表"""
+    return crud.create_project(db=db, num=num)

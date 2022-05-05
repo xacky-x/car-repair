@@ -85,3 +85,16 @@ def authenticate_user(db: Session, phone: str, password: str):
     if not utils.verify_password(password, user.password):
         return False
     return user
+
+def create_project(db: Session, num: int):
+    db_project_list = []
+    for i in range(num):
+        db_project = models.Project(
+            p_name=utils.random_pname()
+        )
+        db_project_list.append(db_project)
+        db.add(db_project)
+        db.commit()
+        db.refresh(db_project)
+    return db_project_list
+

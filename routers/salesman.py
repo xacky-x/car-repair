@@ -124,3 +124,15 @@ async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db
     if db_repair is None:
         raise HTTPException(status_code=404, detail="维修单不存在")
     crud.remove_repair_by_id(db, r_id=id)
+
+@router.post("/create_order", response_model=schemas.Order)
+async def create_order(order: schemas.OrderCreate, db: Session = Depends(dependencies.get_db)):
+    """创建派工单信息"""
+    return crud.create_order(db=db, order=order)
+
+@router.delete("/del_order_by_id/{o_id}", response_model=schemas.Order)
+async def delete_order(o_id: int, db: Session = Depends(dependencies.get_db)):
+    """删除派工单"""
+    res = crud.remove_order_by_id(db, o_id=o_id)
+    if res is False:
+        raise HTTPException(status_code=404, detail="派工单不存在")

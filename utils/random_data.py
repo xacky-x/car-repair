@@ -126,6 +126,11 @@ def random_cost():
 def random_id():
     return 1
 
+def random_pname():
+    #维修项目名称
+    action_list=["维修","更换"]
+    item_list =["车头","车灯","车门","水箱"]
+    return random.choice(action_list)+random.choice(item_list)
 
 if __name__ == '__main__':
     for i in range(10):
