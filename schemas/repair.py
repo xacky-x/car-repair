@@ -2,7 +2,6 @@
 # @Time    : 2022/5/4 14:19
 # @Author  : Cetacean
 # @File    : repair.py
-from typing import List, Optional
 from datetime import date, datetime
 from pydantic import BaseModel
 

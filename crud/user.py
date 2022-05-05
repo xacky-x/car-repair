@@ -32,7 +32,40 @@ def create_user(db: Session, user: schemas.UserCreate):
         name=user.name,
         m_type=user.m_type,
         m_hour=user.m_hour,
+        is_administrator=user.is_administrator,
         is_maintenance=user.is_maintenance
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+def create_salesman(db: Session, user: schemas.SalesmanCreate):
+    hashed_password = utils.get_password_hash(user.password)
+    db_user = models.User(
+        phone=user.phone,
+        password=hashed_password,
+        name=user.name,
+        is_administrator=False,
+        is_maintenance=False
+    )
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+def create_maintenance(db: Session, user: schemas.MaintenanceCreate):
+    hashed_password = utils.get_password_hash(user.password)
+    db_user = models.User(
+        phone=user.phone,
+        password=hashed_password,
+        name=user.name,
+        m_type=user.m_type,
+        m_hour=user.m_hour,
+        is_administrator=False,
+        is_maintenance=True
     )
     db.add(db_user)
     db.commit()
@@ -78,6 +111,51 @@ def create_random_user(db: Session, num: int):
     return db_user_list
 
 
+def create_default_user(db: Session):
+    db_user = models.User(
+        phone="1",
+        password=utils.get_password_hash("1"),
+        name="管理员",
+        is_administrator=True,
+        is_maintenance=False
+    )
+    db.add(db_user)
+    db_user = models.User(
+        phone="2",
+        password=utils.get_password_hash("2"),
+        name="业务员",
+        is_administrator=False,
+        is_maintenance=False
+    )
+    db.add(db_user)
+    db_user = models.User(
+        phone="3",
+        password=utils.get_password_hash("3"),
+        name="维修员",
+        m_type="机修",
+        m_hour="50",
+        is_administrator=False,
+        is_maintenance=True
+    )
+    db.add(db_user)
+    db.commit()
+
+
+def remove_user_by_id(db: Session, id: int):
+    # 删除用户
+    db_user = get_user_by_id(db, id=id)
+    db.delete(db_user)
+    db.commit()
+    return db_user
+
+
+def update_user(db: Session, id: int, name: str):
+    db_user = get_user_by_id(db, id=id)
+    db_user.name = name
+    db.commit()
+    return db_user
+
+
 def authenticate_user(db: Session, phone: str, password: str):
     user = get_user_by_phone(db, phone)
     if not user:
@@ -85,3 +163,110 @@ def authenticate_user(db: Session, phone: str, password: str):
     if not utils.verify_password(password, user.password):
         return False
     return user
+
+
+def create_project(db: Session, num: int):
+    # 创建维修项目表
+    db_project_list = []
+    for i in range(num):
+        db_project = models.Project(
+            p_name=utils.random_pname()
+        )
+        db_project_list.append(db_project)
+        db.add(db_project)
+        db.commit()
+        db.refresh(db_project)
+    return db_project_list
+
+
+def remove_project_by_id(db: Session, p_id: int):
+    # 删除维修项目表
+    db_project = db.query(models.Project).filter(models.Project.p_id == p_id).first()
+    if db_project:
+        db.delete(db_project)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+
+def get_project_by_id(db: Session, p_id: int):
+    # 根据id获取维修项目表
+    return db.query(models.Project).filter(models.Project.p_id == p_id).first()
+
+
+def get_projects(db: Session, skip: int = 0, limit: int = 100):
+    # 获取所有维修项目
+    return db.query(models.Project).offset(skip).limit(limit).all()
+
+
+def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
+    # 更新维修项目
+    db.query(models.Project).filter(models.Project.p_id == p_id).update(project.dict())
+    db.commit()
+    return
+
+
+def create_random_material(db: Session, num: int):
+    # 随机生成材料表
+    db_material_list = []
+    for i in range(num):
+        db_material = models.Material(
+            mt_name=utils.random_pname(),
+            mt_cost=utils.random_cost()
+        )
+        db_material_list.append(db_material)
+        db.add(db_material)
+        db.commit()
+        db.refresh(db_material)
+    return db_material_list
+
+
+def create_material(db: Session, material: schemas.MaterialCreate):
+    # 创建材料表
+    db_material = models.Material(
+        mt_name=material.mt_name,
+        mt_cost=material.mt_cost
+    )
+    db.add(db_material)
+    db.commit()
+    db.refresh(db_material)
+    return db_material
+
+
+def remove_material_by_id(db: Session, mt_id: int):
+    # 删除材料表
+    db_material = db.query(models.Material).filter(models.Material.mt_id == mt_id).first()
+    if db_material:
+        db.delete(db_material)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+
+def get_material_by_id(db: Session, mt_id: int):
+    # 根据id获取材料表
+    return db.query(models.Material).filter(models.Material.mt_id == mt_id).first()
+
+
+def get_material_by_name(db: Session, mt_name: str):
+    # 根据名字获取材料表
+    return db.query(models.Material).filter(models.Material.mt_name == mt_name).first()
+
+
+def get_all_material(db: Session, skip: int = 0, limit: int = 100):
+    # 获取所有材料单
+    count = db.query(models.Material).count()  # 查询数据库现有的数据量
+    if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
+        limit = count
+    return db.query(models.Material).offset(skip).limit(limit).all()
+
+
+def update_material_by_id(db: Session, material: schemas.Material, mt_id: int):
+    # 更新材料表
+    db.query(models.Material).filter(models.Material.mt_id == mt_id).update(material.dict())
+    db.commit()
+    return

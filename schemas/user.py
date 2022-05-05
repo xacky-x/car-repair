@@ -13,6 +13,20 @@ class UserCreate(BaseModel):
     is_maintenance: bool
 
 
+class SalesmanCreate(BaseModel):
+    phone: str
+    password: str
+    name: str
+
+
+class MaintenanceCreate(BaseModel):
+    phone: str
+    password: str
+    name: str
+    m_type: str
+    m_hour: str
+
+
 class User(BaseModel):
     id: int
     name: str

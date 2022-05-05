@@ -27,6 +27,7 @@ app.include_router(routers.users.router)
 app.include_router(routers.salesman.router)
 app.include_router(routers.clients.router)
 app.include_router(routers.vehicles.router)
+app.include_router(routers.maintenance.router)
 
 
 if __name__ == '__main__':

@@ -124,3 +124,35 @@ async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db
     if db_repair is None:
         raise HTTPException(status_code=404, detail="维修单不存在")
     crud.remove_repair_by_id(db, r_id=id)
+
+@router.post("/create_order", response_model=schemas.Order)
+async def create_order(order: schemas.OrderCreate, db: Session = Depends(dependencies.get_db)):
+    """创建派工单信息"""
+    return crud.create_order(db=db, order=order)
+
+@router.delete("/del_order_by_id/{o_id}", response_model=schemas.Order)
+async def delete_order(o_id: int, db: Session = Depends(dependencies.get_db)):
+    """删除派工单"""
+    res = crud.remove_order_by_id(db, o_id=o_id)
+    if res is False:
+        raise HTTPException(status_code=404, detail="派工单不存在")
+
+@router.get("/get_order_by_rid/{r_id}", response_model=schemas.Order)
+async def get_order_by_rid(r_id:int, db: Session = Depends(dependencies.get_db)):
+    """根据维修单id获取派单信息"""
+    db_order = crud.get_order_by_rid(db, r_id=r_id)
+    if db_order is None:
+        raise HTTPException(status_code=404, detail="无派单")
+    return db_order
+
+@router.put("/update_order_by_oid/{o_id}", response_model=schemas.Order)
+async def update_order_by_oid(o_id: int, order: schemas.OrderCreate, db: Session = Depends(dependencies.get_db)):
+    """更新派工单"""
+    updated_order = crud.update_order_by_oid(db, order=order, o_id=o_id)
+    return updated_order
+
+@router.get("/get_all_projects", response_model=List[schemas.Project])
+async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
+    """获取所有维修项目"""
+    projects = crud.get_projects(db, skip=skip, limit=limit)
+    return projects

@@ -26,10 +26,6 @@ def random_phone():
     return fake.phone_number()
 
 
-def random_license():
-    return fake.license_plate()
-
-
 def random_type():
     type_list = ["机修", "钣金", "电工", "喷漆"]
     return random.choice(type_list)
@@ -127,7 +123,19 @@ def random_id():
     return 1
 
 
+def random_pname():
+    # 维修项目名称
+    action_list = ["维修", "更换"]
+    item_list = ["车头", "车灯", "车门", "水箱"]
+    return random.choice(action_list) + random.choice(item_list)
+
+
+def random_mname():
+    mname_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
+                  '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
+    return random.choice(mname_list)
+
+
 if __name__ == '__main__':
     for i in range(10):
-        # print(random_license())
-        print(random_approach_time())
+        print(random_license())

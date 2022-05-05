@@ -101,3 +101,35 @@ def remove_repair_by_id(db: Session, r_id: int):
     db.commit()
     db.flush()
     return True
+
+
+def create_order(db: Session, order: schemas.OrderCreate):
+    # 创建派工单
+    db_order = models.Order(
+        r_id=order.r_id,
+        p_id=order.p_id,
+        hour=order.hour,
+        status=order.status,
+        m_id=order.m_id
+    )
+    db.add(db_order)
+    db.commit()
+    db.refresh(db_order)
+    return db_order
+
+
+def remove_order_by_id(db: Session, o_id: int):
+    # 删除派工单
+    db_order = db.query(models.Order).filter(models.Order.o_id == o_id).first()
+    if db_order:
+        db.delete(db_order)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+
+def get_order_by_rid(db: Session, r_id: int):
+    # 根据维修单获取派单信息
+    return db.query(models.Order).filter(models.Order.r_id == r_id).first()

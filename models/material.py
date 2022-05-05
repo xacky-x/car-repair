@@ -15,4 +15,6 @@ class Material(Base):
 
     mt_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     mt_name = Column(String(20), nullable=False, comment="材料名称")
-    mt_cost = Column(String(20), comment="材料费")
+    mt_cost = Column(Float, comment="材料费")
+
+    m_pm = relationship('PMaterial', back_populates='pm_material')

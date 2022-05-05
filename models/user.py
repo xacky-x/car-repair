@@ -17,3 +17,4 @@ class User(Base):
     is_maintenance = Column(Boolean)
 
     s_repair = relationship('Repair', back_populates="r_salesman")
+    m_order = relationship('Order', back_populates='o_maintenance')
