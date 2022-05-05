@@ -26,17 +26,26 @@ async def get_me(token: str = Depends(utils.oauth2_scheme), db: Session = Depend
     return db
 
 
-@router.get("/get_all", response_model=List[schemas.Client])
-async def get_clients(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
+@router.get("/get_all_clients", response_model=List[schemas.Client])
+async def get_all_clients(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有顾客信息"""
     clients = crud.get_clients(db, skip=skip, limit=limit)
     return clients
 
 
-@router.get("/get_by_phone/{phone}", response_model=schemas.Client)
-async def get_client(phone: str, db: Session = Depends(dependencies.get_db)):
+@router.get("/get_client_by_phone/{phone}", response_model=schemas.Client)
+async def get_client_by_phone(phone: str, db: Session = Depends(dependencies.get_db)):
     """根据手机号获取顾客信息"""
     db_client = crud.get_client_by_phone(db, phone=phone)
+    if db_client is None:
+        raise HTTPException(status_code=404, detail="顾客不存在")
+    return db_client
+
+
+@router.get("/get_client_by_id/{id}", response_model=schemas.Client)
+async def get_client_by_id(id: int, db: Session = Depends(dependencies.get_db)):
+    """根据id获取顾客信息"""
+    db_client = crud.get_client_by_id(db, c_id=id)
     if db_client is None:
         raise HTTPException(status_code=404, detail="顾客不存在")
     return db_client
