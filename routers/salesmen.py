@@ -110,6 +110,12 @@ async def get_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
     return db_repair
 
 
+@router.put("/update_repair_by_id/{r_id}", response_model=schemas.Repair)
+async def update_repair_by_id(r_id: int, repair: schemas.RepairCreate, db: Session = Depends(dependencies.get_db)):
+    updated_repair = crud.update_repair_by_id(db, repair=repair, r_id=r_id)
+    return updated_repair
+
+
 @router.delete("/del_repair_by_id/{r_id}", response_model=schemas.Repair)
 async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
     """删除维修单"""
