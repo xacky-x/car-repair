@@ -71,7 +71,7 @@ def create_repair(db: Session, repair: schemas.RepairCreate):
 
 def get_repair_by_type(db: Session, type: str):
     # 根据维修单类型查询
-    return db.query(models.Repair).filter(models.Repair.r_type == type).first()
+    return db.query(models.Repair).filter(models.Repair.r_type == type).all()
 
 
 def get_repair_by_id(db: Session, id: int):

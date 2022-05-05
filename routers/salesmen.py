@@ -89,11 +89,10 @@ async def create_repair(repair: schemas.RepairCreate, db: Session = Depends(depe
 async def get_all_repair(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修单"""
     all_repair = crud.get_all_repair(db, skip=skip, limit=limit)
-    print(all_repair)
     return all_repair
 
 
-@router.get("/get_repair_by_type/{type}", response_model=schemas.Repair)
+@router.get("/get_repair_by_type/{type}", response_model=List[schemas.Repair])
 async def get_repair_by_type(type: str, db: Session = Depends(dependencies.get_db)):
     """根据类型获取维修单"""
     db_repair = crud.get_repair_by_type(db, type=type)
@@ -119,4 +118,3 @@ async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db
     if db_repair is None:
         raise HTTPException(status_code=404, detail="维修单不存在")
     crud.remove_repair_by_id(db, r_id=id)
-    return "维修单删除成功"
