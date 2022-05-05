@@ -26,10 +26,6 @@ def random_phone():
     return fake.phone_number()
 
 
-def random_license():
-    return fake.license_plate()
-
-
 def random_type():
     type_list = ["机修", "钣金", "电工", "喷漆"]
     return random.choice(type_list)
@@ -134,5 +130,4 @@ def random_pname():
 
 if __name__ == '__main__':
     for i in range(10):
-        # print(random_license())
-        print(random_approach_time())
+        print(random_license())
