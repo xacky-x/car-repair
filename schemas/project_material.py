@@ -7,7 +7,7 @@ from datetime import date, datetime
 from pydantic import BaseModel
 
 
-class PMaterialCreate(BaseModel):
+class PMaterialUpdate(BaseModel):
     num: int
 
 

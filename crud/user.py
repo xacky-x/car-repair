@@ -1,5 +1,6 @@
 import random
 from sqlalchemy.orm import Session
+from typing import List
 
 import models, schemas, utils
 
@@ -208,6 +209,7 @@ def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
     return
 
 
+# 材料表部分
 def create_random_material(db: Session, num: int):
     # 随机生成材料表
     db_material_list = []
@@ -268,5 +270,69 @@ def get_all_material(db: Session, skip: int = 0, limit: int = 100):
 def update_material_by_id(db: Session, material: schemas.Material, mt_id: int):
     # 更新材料表
     db.query(models.Material).filter(models.Material.mt_id == mt_id).update(material.dict())
+    db.commit()
+    return
+
+
+# 项目使用材料表
+def create_pmaterial(db: Session, pmaterial: schemas.PMaterial):
+    # 创建使用材料表
+    db_pmaterial = models.PMaterial(
+        mt_id=pmaterial.mt_id,
+        p_id=pmaterial.p_id,
+        num=pmaterial.num,
+    )
+    db.add(db_pmaterial)
+    db.commit()
+    db.refresh(db_pmaterial)
+    return db_pmaterial
+
+
+def create_mul_pmaterial(db: Session, pmaterial: List[schemas.PMaterial]):
+    # 创建多条使用材料记录
+    db_pmaterial_list = []
+    for i_pmaterial in pmaterial:
+        db_pmaterial = models.PMaterial(
+            mt_id=i_pmaterial.mt_id,
+            p_id=i_pmaterial.p_id,
+            num=i_pmaterial.num,
+        )
+        db_pmaterial_list.append(db_pmaterial)
+        db.add(db_pmaterial)
+        db.commit()
+        db.refresh(db_pmaterial)
+    return db_pmaterial_list
+
+
+def remove_pmaterial_by_id(db: Session, mt_id: int, p_id: int):
+    # 删除使用材料表
+    db_pmaterial = db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id,
+                                                     models.PMaterial.p_id == p_id).first()
+    if db_pmaterial:
+        db.delete(db_pmaterial)
+    else:
+        return False
+    db.commit()
+    db.flush()
+    return True
+
+
+def get_pmaterial_by_id(db: Session, mt_id: int, p_id: int):
+    # 根据id获取使用材料表
+    return db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id, models.PMaterial.p_id == p_id).first()
+
+
+def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
+    # 获取所有使用材料单
+    count = db.query(models.PMaterial).count()  # 查询数据库现有的数据量
+    if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
+        limit = count
+    return db.query(models.PMaterial).offset(skip).limit(limit).all()
+
+
+def update_pmaterial_by_id(db: Session, pmaterial: schemas.PMaterialUpdate, mt_id: int, p_id: int):
+    # 更新使用材料表
+    db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id, models.PMaterial.p_id == p_id).update(
+        pmaterial.dict())
     db.commit()
     return
