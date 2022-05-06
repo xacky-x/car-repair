@@ -14,7 +14,8 @@ import models
 class PMaterial(Base):
     __tablename__ = "pmaterial"
 
-    mt_id = Column(Integer, ForeignKey('material.mt_id'), primary_key=True, comment="材料编号", index=True)
+    mt_id = Column(Integer, ForeignKey('material.mt_id'), primary_key=True, comment="材料编号",
+                   index=True)
     p_id = Column(Integer, ForeignKey('project.p_id'), primary_key=True, comment="维修项目编号", index=True)
     num = Column(Integer, comment="数量")
 

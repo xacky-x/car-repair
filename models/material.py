@@ -17,4 +17,5 @@ class Material(Base):
     mt_name = Column(String(20), nullable=False, comment="材料名称")
     mt_cost = Column(Float, comment="材料费")
 
-    m_pm = relationship('PMaterial', back_populates='pm_material')
+    m_pm = relationship('PMaterial', back_populates='pm_material',
+                        cascade='all, delete-orphan')  # 针对于1对多，写在父表的relationship中

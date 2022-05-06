@@ -184,8 +184,9 @@ def create_default_project(db: Session):
         db.refresh(db_project)
     return db_project_list
 
-def create_project(db: Session,project:schemas.ProjectCreate):
-    db_project=models.Project(
+
+def create_project(db: Session, project: schemas.ProjectCreate):
+    db_project = models.Project(
         p_name=project.p_name
     )
     db.add(db_project)
@@ -209,6 +210,7 @@ def remove_project_by_id(db: Session, p_id: int):
 def get_project_by_id(db: Session, p_id: int):
     # 根据id获取维修项目表
     return db.query(models.Project).filter(models.Project.p_id == p_id).first()
+
 
 def get_project_by_name(db: Session, p_name: str):
     # 根据name获取维修项目表
@@ -343,9 +345,15 @@ def get_pmaterial_by_id(db: Session, mt_id: int, p_id: int):
     # 根据id获取使用材料表
     return db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id, models.PMaterial.p_id == p_id).first()
 
+
 def get_pmaterial_by_pid(db: Session, p_id: int):
     # 根据pid获取使用材料表
     return db.query(models.PMaterial).filter(models.PMaterial.p_id == p_id).all()
+
+
+def get_pmatertial_by_mtid(db: Session, mt_id: int):
+    return db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id).all()
+
 
 def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有使用材料单

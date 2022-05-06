@@ -186,8 +186,14 @@ async def get_all_pmaterial(skip: int = 0, limit: int = 100, db: Session = Depen
 
 @router.get("/get_pmaterial_by_id", response_model=schemas.PMaterial)
 async def get_pmaterial_by_id(mt_id: int, p_id: int, db: Session = Depends(dependencies.get_db)):
-    """获取所有维修项目"""
+    """根据pid 和 mtid 获取维修项目"""
     return crud.get_pmaterial_by_id(db, mt_id=mt_id, p_id=p_id)
+
+
+@router.get("/get_pmaterial_by_mtid/{mt_id}", response_model=List[schemas.PMaterial])
+async def get_pmatertial_by_mtid(mt_id: int, db: Session = Depends(dependencies.get_db)):
+    """ 根据mtid获取所有维修项目"""
+    return crud.get_pmatertial_by_mtid(db, mt_id=mt_id)
 
 
 @router.put("/update_pmaterial_by_id/{mt_id}", response_model=schemas.PMaterial)
