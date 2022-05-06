@@ -133,20 +133,20 @@ async def delete_material(mt_id: int, db: Session = Depends(dependencies.get_db)
 
 @router.get("/get_all_material", response_model=List[schemas.Material])
 async def get_all_material(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
-    """获取所有维修项目"""
+    """获取所有材料"""
     return crud.get_all_material(db=db, skip=skip, limit=limit)
 
 
 @router.get("/get_material_by_id", response_model=schemas.Material)
 async def get_material_by_id(mt_id: int, db: Session = Depends(dependencies.get_db)):
-    """获取所有维修项目"""
+    """根据id获取材料"""
     return crud.get_material_by_id(db, mt_id=mt_id)
 
 
 @router.put("/update_material_by_id/{mt_id}", response_model=schemas.Material)
 async def update_material_by_id(mt_id: int, material: schemas.MaterialCreate,
                                 db: Session = Depends(dependencies.get_db)):
-    """更新维修项目"""
+    """更新材料"""
     updated_material = crud.update_material_by_id(db, material=material, mt_id=mt_id)
     return updated_material
 
