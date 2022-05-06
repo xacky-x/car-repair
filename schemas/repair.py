@@ -6,7 +6,7 @@ from datetime import date, datetime
 from pydantic import BaseModel
 
 
-class RepairCreate(BaseModel):
+class RepairBase(BaseModel):
     r_type: str
     r_class: str
     payment: str
@@ -16,25 +16,20 @@ class RepairCreate(BaseModel):
     failure: str
     completion_time: date
     date: date
-    cost: float
     v_id: int
     s_id: int
 
 
-class Repair(BaseModel):
+class RepairCreate(RepairBase):
+    pass
+
+
+class RepairUpdate(RepairBase):
+    cost: float
+
+
+class Repair(RepairBase):
     r_id: int
-    r_type: str
-    r_class: str
-    payment: str
-    mileage: float
-    fuel: float
-    approach_time: datetime
-    failure: str
-    completion_time: date
-    date: date
-    cost: float
-    v_id: int
-    s_id: int
 
     class Config:
         orm_mode = True

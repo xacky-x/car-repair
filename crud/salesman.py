@@ -35,7 +35,6 @@ def create_random_repair(db: Session, num: int):
             failure=rd.random_failure(),
             completion_time=rd.random_completion_time(),
             date=rd.random_date(),
-            cost=rd.random_cost(),
             s_id=rd.random_id(),
             v_id=rd.random_id(),
         )
@@ -49,20 +48,7 @@ def create_random_repair(db: Session, num: int):
 
 def create_repair(db: Session, repair: schemas.RepairCreate):
     # 创建维修单
-    db_repair = models.Repair(
-        r_type=repair.r_type,
-        r_class=repair.r_class,
-        payment=repair.payment,
-        mileage=repair.mileage,
-        fuel=repair.fuel,
-        approach_time=repair.approach_time,
-        failure=repair.failure,
-        completion_time=repair.completion_time,
-        date=repair.date,
-        cost=repair.cost,
-        s_id=repair.s_id,
-        v_id=repair.v_id
-    )
+    db_repair = models.Repair(**repair.dict())
     db.add(db_repair)
     db.commit()
     db.refresh(db_repair)
@@ -84,7 +70,7 @@ def get_repair_by_cv(db: Session, s_id: int, v_id: int):
     return db.query(models.Repair).filter(models.Repair.s_id == s_id, models.Repair.v_id == v_id).first()
 
 
-def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
+def update_repair_by_id(db: Session, repair: schemas.RepairUpdate, r_id: int):
     # 更新维修单
     db.query(models.Repair).filter(models.Repair.r_id == r_id).update(repair.dict())
     db.commit()
@@ -134,11 +120,13 @@ def get_order_by_rid(db: Session, r_id: int):
     # 根据维修单获取派单信息
     return db.query(models.Order).filter(models.Order.r_id == r_id).all()
 
-def get_m_hour(db:Session,m_id:int):
-    # 获取维修员的单价
-    return db.query(models.User).filter(models.User.id==m_id).first()
 
-def update_cost(db:Session,r_id:int,cost:float):
+def get_m_hour(db: Session, m_id: int):
+    # 获取维修员的单价
+    return db.query(models.User).filter(models.User.id == m_id).first()
+
+
+def update_cost(db: Session, r_id: int, cost: float):
     db_repair = get_repair_by_id(db, id=r_id)
     db_repair.cost = cost
     db.commit()
