@@ -169,10 +169,12 @@ def authenticate_user(db: Session, phone: str, password: str):
 def create_default_project(db: Session):
     # 创建维修项目表
     action_list = ["维修", "更换"]
-    item_list = ["车头", "车灯", "车门", "水箱"]
-    project_list = [x+y for x in action_list for y in item_list]
+    item_list = ["车头", "车灯", "车门", "水箱", "油箱"]
+    project_list = [x + y for x in action_list for y in item_list]
     db_project_list = []
     for i in range(len(project_list)):
+        if get_project_by_name(db, project_list[i]):
+            continue
         db_project = models.Project(
             p_name=project_list[i]
         )
@@ -200,6 +202,11 @@ def get_project_by_id(db: Session, p_id: int):
     return db.query(models.Project).filter(models.Project.p_id == p_id).first()
 
 
+def get_project_by_name(db: Session, p_name: str):
+    # 根据name获取维修项目表
+    return db.query(models.Project).filter(models.Project.p_name == p_name).first()
+
+
 def get_projects(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有维修项目
     return db.query(models.Project).offset(skip).limit(limit).all()
@@ -219,8 +226,10 @@ def create_default_material(db: Session):
                   '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
     db_material_list = []
     for i in range(len(mname_list)):
+        if get_material_by_name(db, mname_list[i]):
+            continue
         db_material = models.Material(
-            mt_name= mname_list[i],
+            mt_name=mname_list[i],
             mt_cost=utils.random_cost()
         )
         db_material_list.append(db_material)

@@ -77,7 +77,11 @@ async def create_random_repair(num: int, db: Session = Depends(get_db)):
 
 @router.post("/create_default_material", response_model=List[schemas.Material])
 async def create_default_material(db: Session = Depends(get_db)):
-    """随机创建维修单"""
+    """创建默认材料表"""
     return crud.create_default_material(db=db)
 
 
+@router.post("/create_default_project", response_model=List[schemas.Project])
+async def create_project(db: Session = Depends(get_db)):
+    """创建默认维修项目表"""
+    return crud.create_default_project(db=db)
