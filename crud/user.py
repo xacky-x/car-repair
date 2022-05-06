@@ -285,9 +285,6 @@ def get_material_by_name(db: Session, mt_name: str):
 
 def get_all_material(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有材料单
-    count = db.query(models.Material).count()  # 查询数据库现有的数据量
-    if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
-        limit = count
     return db.query(models.Material).offset(skip).limit(limit).all()
 
 
