@@ -184,7 +184,6 @@ async def get_cost(r_id: int, db: Session = Depends(dependencies.get_db)):
             pm = crud.get_pmaterial_by_pid(db, p_id=item.p_id)
             for pm_item in pm:
                 m = crud.get_material_by_id(db, mt_id=pm_item.mt_id)
-                for m_item in m:
-                    cost += pm_item.num * m_item.mt_cost
+                cost += pm_item.num * m.mt_cost
     crud.update_cost(db, r_id, cost)
     return cost

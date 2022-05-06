@@ -275,7 +275,7 @@ def remove_material_by_id(db: Session, mt_id: int):
 
 def get_material_by_id(db: Session, mt_id: int):
     # 根据id获取材料表
-    return db.query(models.Material).filter(models.Material.mt_id == mt_id).all()
+    return db.query(models.Material).filter(models.Material.mt_id == mt_id).first()
 
 
 def get_material_by_name(db: Session, mt_name: str):
