@@ -22,12 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(routers.create_data.router)
 app.include_router(routers.login.router)
 app.include_router(routers.users.router)
 app.include_router(routers.salesman.router)
-app.include_router(routers.clients.router)
-app.include_router(routers.vehicles.router)
 app.include_router(routers.maintenance.router)
+
 
 
 if __name__ == '__main__':

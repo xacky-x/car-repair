@@ -222,7 +222,7 @@ def get_projects(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Project).offset(skip).limit(limit).all()
 
 
-def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
+def update_project_by_id(db: Session, project: schemas.ProjectCreate, p_id: int):
     # 更新维修项目
     db.query(models.Project).filter(models.Project.p_id == p_id).update(project.dict())
     db.commit()
@@ -232,14 +232,14 @@ def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
 # 材料表部分
 def create_default_material(db: Session):
     # 随机生成材料表
-    mname_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
+    m_name_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
                   '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
     db_material_list = []
-    for i in range(len(mname_list)):
-        if get_material_by_name(db, mname_list[i]):
+    for i in range(len(m_name_list)):
+        if get_material_by_name(db, m_name_list[i]):
             continue
         db_material = models.Material(
-            mt_name=mname_list[i],
+            mt_name=m_name_list[i],
             mt_cost=utils.random_cost()
         )
         db_material_list.append(db_material)
@@ -291,7 +291,7 @@ def get_all_material(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Material).offset(skip).limit(limit).all()
 
 
-def update_material_by_id(db: Session, material: schemas.Material, mt_id: int):
+def update_material_by_id(db: Session, material: schemas.MaterialCreate, mt_id: int):
     # 更新材料表
     db.query(models.Material).filter(models.Material.mt_id == mt_id).update(material.dict())
     db.commit()
