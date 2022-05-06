@@ -125,15 +125,9 @@ def random_id():
 
 def random_pname():
     # 维修项目名称
-    action_list = ["维修", "更换"]
-    item_list = ["车头", "车灯", "车门", "水箱"]
+
     return random.choice(action_list) + random.choice(item_list)
 
-
-def random_mname():
-    mname_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
-                  '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
-    return random.choice(mname_list)
 
 
 if __name__ == '__main__':

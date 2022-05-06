@@ -166,12 +166,15 @@ def authenticate_user(db: Session, phone: str, password: str):
     return user
 
 
-def create_project(db: Session, num: int):
+def create_default_project(db: Session):
     # 创建维修项目表
+    action_list = ["维修", "更换"]
+    item_list = ["车头", "车灯", "车门", "水箱"]
+    project_list = [x+y for x in action_list for y in item_list]
     db_project_list = []
-    for i in range(num):
+    for i in range(len(project_list)):
         db_project = models.Project(
-            p_name=utils.random_pname()
+            p_name=project_list[i]
         )
         db_project_list.append(db_project)
         db.add(db_project)
@@ -210,12 +213,14 @@ def update_project_by_id(db: Session, project: schemas.Project, p_id: int):
 
 
 # 材料表部分
-def create_random_material(db: Session, num: int):
+def create_default_material(db: Session):
     # 随机生成材料表
+    mname_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
+                  '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
     db_material_list = []
-    for i in range(num):
+    for i in range(len(mname_list)):
         db_material = models.Material(
-            mt_name=utils.random_pname(),
+            mt_name= mname_list[i],
             mt_cost=utils.random_cost()
         )
         db_material_list.append(db_material)
