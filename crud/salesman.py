@@ -132,8 +132,14 @@ def remove_order_by_id(db: Session, o_id: int):
 
 def get_order_by_rid(db: Session, r_id: int):
     # 根据维修单获取派单信息
-    return db.query(models.Order).filter(models.Order.r_id == r_id).first()
+    return db.query(models.Order).filter(models.Order.r_id == r_id).all()
 
 def get_m_hour(db:Session,m_id:int):
     # 获取维修员的单价
     return db.query(models.User).filter(models.User.id==m_id).first()
+
+def update_cost(db:Session,r_id:int,cost:float):
+    db_repair = get_repair_by_id(db, id=r_id)
+    db_repair.cost = cost
+    db.commit()
+    # return db_repair

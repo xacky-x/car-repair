@@ -168,13 +168,19 @@ async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depend
 
 @router.get("/get_cost")
 async def get_cost(r_id:int,db:Session= Depends(dependencies.get_db)):
+    """获取维修费用"""
     order=crud.get_order_by_rid(db,r_id=r_id)
-    maintenance = crud.get_m_hour(db,m_id=order.m_id)
-    #维修员工时单价maintenance.m_hour
-    pm = crud.get_pmaterial_by_id(db,p_id=order.p_id)
-    m = crud.get_material_by_id(db,mt_id=pm.mt_id)
-    ans = order.hour*maintenance.m_hour+pm.num*m.mt_cost
-    # for item in pm:
-    #     m = crud.get_material_by_id(db,pm.)
-    return ans
+    cost=0
+    for item in order:
+        if item.status == 1:
+            maintenance = crud.get_m_hour(db,m_id=item.m_id)
+            cost += item.hour*maintenance.m_hour#所有工时费用
+            pm = crud.get_pmaterial_by_pid(db, p_id=item.p_id)
+            for pm_item in pm:
+                m = crud.get_material_by_id(db, mt_id=pm_item.mt_id)
+                for m_item in m:
+                    cost+=pm_item.num*m_item.mt_cost
+    crud.update_cost(db,r_id,cost)
+    return cost
+
 

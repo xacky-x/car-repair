@@ -211,10 +211,6 @@ def get_project_by_id(db: Session, p_id: int):
     return db.query(models.Project).filter(models.Project.p_id == p_id).first()
 
 def get_project_by_name(db: Session, p_name: str):
-    # 根据名称获取维修项目表
-    return db.query(models.Project).filter(models.Project.p_name == p_name).first()
-
-def get_project_by_name(db: Session, p_name: str):
     # 根据name获取维修项目表
     return db.query(models.Project).filter(models.Project.p_name == p_name).first()
 
@@ -277,7 +273,7 @@ def remove_material_by_id(db: Session, mt_id: int):
 
 def get_material_by_id(db: Session, mt_id: int):
     # 根据id获取材料表
-    return db.query(models.Material).filter(models.Material.mt_id == mt_id).first()
+    return db.query(models.Material).filter(models.Material.mt_id == mt_id).all()
 
 
 def get_material_by_name(db: Session, mt_name: str):
@@ -347,9 +343,9 @@ def get_pmaterial_by_id(db: Session, mt_id: int, p_id: int):
     # 根据id获取使用材料表
     return db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id, models.PMaterial.p_id == p_id).first()
 
-def get_pmaterial_by_id(db: Session, p_id: int):
+def get_pmaterial_by_pid(db: Session, p_id: int):
     # 根据pid获取使用材料表
-    return db.query(models.PMaterial).filter(models.PMaterial.p_id == p_id).first()
+    return db.query(models.PMaterial).filter(models.PMaterial.p_id == p_id).all()
 
 def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有使用材料单
