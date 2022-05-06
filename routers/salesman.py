@@ -165,7 +165,7 @@ async def update_order_by_oid(o_id: int, order: schemas.OrderCreate, db: Session
     return updated_order
 
 
-@router.get("/get_all_projects", response_model=List[schemas.Project])
+@router.get("/get_all_projects", response_model=List[schemas.ProjectShow])
 async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修项目"""
     projects = crud.get_projects(db, skip=skip, limit=limit)

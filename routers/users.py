@@ -91,7 +91,7 @@ async def create_project(project: schemas.ProjectCreate, db: Session = Depends(g
     return crud.create_project(db=db, project=project)
 
 
-@router.get("/get_all_projects", response_model=List[schemas.Project])
+@router.get("/get_all_projects", response_model=List[schemas.ProjectShow])
 async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修项目"""
     projects = crud.get_projects(db, skip=skip, limit=limit)
