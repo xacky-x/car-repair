@@ -82,6 +82,13 @@ async def delete_user(id: int, db: Session = Depends(get_db)):
 #         raise HTTPException(status_code=400, detail="用户不存在")
 #     return crud.update_user(db=db, id=id, name=name)
 
+@router.post("/create_project", response_model=schemas.Project)
+async def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)):
+    """创建项目表"""
+    db_project= crud.get_project_by_name(db, p_name=project.p_name)
+    if db_project:
+        raise HTTPException(status_code=400, detail="维修项目已存在")
+    return crud.create_project(db=db, project=project)
 
 @router.get("/get_all_projects", response_model=List[schemas.Project])
 async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):

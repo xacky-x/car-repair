@@ -184,6 +184,15 @@ def create_default_project(db: Session):
         db.refresh(db_project)
     return db_project_list
 
+def create_project(db: Session,project:schemas.ProjectCreate):
+    db_project=models.Project(
+        p_name=project.p_name
+    )
+    db.add(db_project)
+    db.commit()
+    db.refresh(db_project)
+    return db_project
+
 
 def remove_project_by_id(db: Session, p_id: int):
     # 删除维修项目表
@@ -201,6 +210,9 @@ def get_project_by_id(db: Session, p_id: int):
     # 根据id获取维修项目表
     return db.query(models.Project).filter(models.Project.p_id == p_id).first()
 
+def get_project_by_name(db: Session, p_name: str):
+    # 根据名称获取维修项目表
+    return db.query(models.Project).filter(models.Project.p_name == p_name).first()
 
 def get_project_by_name(db: Session, p_name: str):
     # 根据name获取维修项目表
