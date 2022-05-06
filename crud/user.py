@@ -347,6 +347,9 @@ def get_pmaterial_by_id(db: Session, mt_id: int, p_id: int):
     # 根据id获取使用材料表
     return db.query(models.PMaterial).filter(models.PMaterial.mt_id == mt_id, models.PMaterial.p_id == p_id).first()
 
+def get_pmaterial_by_id(db: Session, p_id: int):
+    # 根据pid获取使用材料表
+    return db.query(models.PMaterial).filter(models.PMaterial.p_id == p_id).first()
 
 def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有使用材料单
