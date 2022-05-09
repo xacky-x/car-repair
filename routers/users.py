@@ -16,6 +16,17 @@ router = APIRouter(
 )
 
 
+@router.get("/get_me", response_model=schemas.User)
+async def get_me(token: str = Depends(utils.oauth2_scheme), db: Session = Depends(dependencies.get_db)):
+    """获取当前管理员个人信息"""
+    sub = dependencies.verify_token(token)
+    phone = sub.split(',')[0]
+    db = crud.get_user_by_phone(db, phone=phone)
+    if db is None:
+        raise HTTPException(status_code=404, detail="管理员信息不存在")
+    return db
+
+
 @router.get("/get_all_administrators", response_model=List[schemas.User])
 async def get_all_administrators(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     administrators = crud.get_administrator(db, skip=skip, limit=limit)
