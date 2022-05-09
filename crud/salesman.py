@@ -70,7 +70,7 @@ def get_repair_by_cv(db: Session, s_id: int, v_id: int):
     return db.query(models.Repair).filter(models.Repair.s_id == s_id, models.Repair.v_id == v_id).first()
 
 
-def update_repair_by_id(db: Session, repair: schemas.RepairUpdate, r_id: int):
+def update_repair_by_id(db: Session, repair: schemas.RepairCreate, r_id: int):
     # 更新维修单
     db.query(models.Repair).filter(models.Repair.r_id == r_id).update(repair.dict())
     db.commit()

@@ -120,7 +120,7 @@ async def get_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
 
 
 @router.put("/update_repair_by_id/{r_id}", response_model=schemas.Repair)
-async def update_repair_by_id(r_id: int, repair: schemas.RepairUpdate, db: Session = Depends(dependencies.get_db)):
+async def update_repair_by_id(r_id: int, repair: schemas.RepairCreate, db: Session = Depends(dependencies.get_db)):
     updated_repair = crud.update_repair_by_id(db, repair=repair, r_id=r_id)
     return updated_repair
 
