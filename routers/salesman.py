@@ -138,7 +138,10 @@ async def delete_repair_by_id(id: int, db: Session = Depends(dependencies.get_db
 @router.post("/create_order", response_model=schemas.Order)
 async def create_order(order: schemas.OrderCreate, db: Session = Depends(dependencies.get_db)):
     """创建派工单信息"""
-    return crud.create_order(db=db, order=order)
+    if not crud.get_maintenance_by_id(db, id=order.m_id):
+        raise HTTPException(status_code=404, detail="维修人员不存在")
+    else:
+        return crud.create_order(db=db, order=order)
 
 
 @router.delete("/del_order_by_id/{o_id}", response_model=schemas.Order)
@@ -149,7 +152,7 @@ async def delete_order(o_id: int, db: Session = Depends(dependencies.get_db)):
         raise HTTPException(status_code=404, detail="派工单不存在")
 
 
-@router.get("/get_order_by_rid/{r_id}", response_model=schemas.Order)
+@router.get("/get_order_by_rid/{r_id}", response_model=List[schemas.OrderShow])
 async def get_order_by_rid(r_id: int, db: Session = Depends(dependencies.get_db)):
     """根据维修单id获取派单信息"""
     db_order = crud.get_order_by_rid(db, r_id=r_id)
@@ -187,3 +190,22 @@ async def get_cost(r_id: int, db: Session = Depends(dependencies.get_db)):
                 cost += pm_item.num * m.mt_cost
     crud.update_cost(db, r_id, cost)
     return cost
+
+
+@router.get("/get_project_by_pid/{p_id}", response_model=schemas.Project)
+async def get_project_by_pid(p_id: int, db: Session = Depends(dependencies.get_db)):
+    """根据pid查询项目信息"""
+    db_project = crud.get_project_by_pid(db, p_id=p_id)
+    return db_project
+
+
+@router.get("/get_maintenance_by_id/{m_id}", response_model=schemas.User)
+async def get_maintenance_by_id(m_id: int, db: Session = Depends(dependencies.get_db)):
+    """根据mid查询维修员信息"""
+    return crud.get_maintenance_by_id(db, id=m_id)
+
+
+@router.get("/get_maintenances/", response_model=List[schemas.User])
+async def get_maintenances(db: Session = Depends(dependencies.get_db)):
+    """查询所有维修员的信息"""
+    return crud.get_maintenances(db)

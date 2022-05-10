@@ -131,3 +131,8 @@ def update_cost(db: Session, r_id: int, cost: float):
     db_repair.cost = cost
     db.commit()
     # return db_repair
+
+
+def get_project_by_pid(db: Session, p_id: int):
+    # 根据pid获取项目信息
+    return db.query(models.Project).filter(models.Project.p_id == p_id).first()
