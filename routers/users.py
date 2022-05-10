@@ -16,6 +16,17 @@ router = APIRouter(
 )
 
 
+@router.get("/get_me", response_model=schemas.User)
+async def get_me(token: str = Depends(utils.oauth2_scheme), db: Session = Depends(dependencies.get_db)):
+    """获取当前管理员个人信息"""
+    sub = dependencies.verify_token(token)
+    phone = sub.split(',')[0]
+    db = crud.get_user_by_phone(db, phone=phone)
+    if db is None:
+        raise HTTPException(status_code=404, detail="管理员信息不存在")
+    return db
+
+
 @router.get("/get_all_administrators", response_model=List[schemas.User])
 async def get_all_administrators(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     administrators = crud.get_administrator(db, skip=skip, limit=limit)
@@ -85,12 +96,13 @@ async def delete_user(id: int, db: Session = Depends(get_db)):
 @router.post("/create_project", response_model=schemas.Project)
 async def create_project(project: schemas.ProjectCreate, db: Session = Depends(get_db)):
     """创建项目表"""
-    db_project= crud.get_project_by_name(db, p_name=project.p_name)
+    db_project = crud.get_project_by_name(db, p_name=project.p_name)
     if db_project:
         raise HTTPException(status_code=400, detail="维修项目已存在")
     return crud.create_project(db=db, project=project)
 
-@router.get("/get_all_projects", response_model=List[schemas.Project])
+
+@router.get("/get_all_projects", response_model=List[schemas.ProjectShow])
 async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修项目"""
     projects = crud.get_projects(db, skip=skip, limit=limit)
@@ -132,20 +144,20 @@ async def delete_material(mt_id: int, db: Session = Depends(dependencies.get_db)
 
 @router.get("/get_all_material", response_model=List[schemas.Material])
 async def get_all_material(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
-    """获取所有维修项目"""
+    """获取所有材料"""
     return crud.get_all_material(db=db, skip=skip, limit=limit)
 
 
 @router.get("/get_material_by_id", response_model=schemas.Material)
 async def get_material_by_id(mt_id: int, db: Session = Depends(dependencies.get_db)):
-    """获取所有维修项目"""
+    """根据id获取材料"""
     return crud.get_material_by_id(db, mt_id=mt_id)
 
 
 @router.put("/update_material_by_id/{mt_id}", response_model=schemas.Material)
 async def update_material_by_id(mt_id: int, material: schemas.MaterialCreate,
                                 db: Session = Depends(dependencies.get_db)):
-    """更新维修项目"""
+    """更新材料"""
     updated_material = crud.update_material_by_id(db, material=material, mt_id=mt_id)
     return updated_material
 

@@ -165,7 +165,7 @@ async def update_order_by_oid(o_id: int, order: schemas.OrderCreate, db: Session
     return updated_order
 
 
-@router.get("/get_all_projects", response_model=List[schemas.Project])
+@router.get("/get_all_projects", response_model=List[schemas.ProjectShow])
 async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修项目"""
     projects = crud.get_projects(db, skip=skip, limit=limit)
@@ -184,7 +184,6 @@ async def get_cost(r_id: int, db: Session = Depends(dependencies.get_db)):
             pm = crud.get_pmaterial_by_pid(db, p_id=item.p_id)
             for pm_item in pm:
                 m = crud.get_material_by_id(db, mt_id=pm_item.mt_id)
-                for m_item in m:
-                    cost += pm_item.num * m_item.mt_cost
+                cost += pm_item.num * m.mt_cost
     crud.update_cost(db, r_id, cost)
     return cost
