@@ -219,7 +219,7 @@ def get_project_by_name(db: Session, p_name: str):
 
 def get_projects(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有维修项目
-    return db.query(models.Project).offset(skip).limit(limit).all()
+    return db.query(models.Project).order_by(models.Project.p_id).offset(skip).limit(limit).all()
 
 
 def update_project_by_id(db: Session, project: schemas.ProjectCreate, p_id: int):
@@ -232,8 +232,9 @@ def update_project_by_id(db: Session, project: schemas.ProjectCreate, p_id: int)
 # 材料表部分
 def create_default_material(db: Session):
     # 随机生成材料表
-    m_name_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴', '气门',
-                  '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
+    m_name_list = ['油漆', '火花塞', '节气门体', '发动机', '发动机总成', '油泵', '油嘴', '涨紧轮', '气缸体', '轴瓦', '水泵', '燃油喷射', '密封垫', '凸轮轴',
+                   '气门',
+                   '曲轴', '连杆总成', '活塞', '皮带', '消声器', '化油器', '油箱', '水箱', '风扇', '油封', '散热器', '滤清器']
     db_material_list = []
     for i in range(len(m_name_list)):
         if get_material_by_name(db, m_name_list[i]):
@@ -285,7 +286,7 @@ def get_material_by_name(db: Session, mt_name: str):
 
 def get_all_material(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有材料单
-    return db.query(models.Material).offset(skip).limit(limit).all()
+    return db.query(models.Material).order_by(models.Material.mt_id).offset(skip).limit(limit).all()
 
 
 def update_material_by_id(db: Session, material: schemas.MaterialCreate, mt_id: int):
@@ -357,7 +358,8 @@ def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
     count = db.query(models.PMaterial).count()  # 查询数据库现有的数据量
     if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
         limit = count
-    return db.query(models.PMaterial).offset(skip).limit(limit).all()
+    return db.query(models.PMaterial).order_by(models.PMaterial.p_id, models.PMaterial.mt_id).offset(
+        skip).limit(limit).all()
 
 
 def update_pmaterial_by_id(db: Session, pmaterial: schemas.PMaterialUpdate, mt_id: int, p_id: int):
