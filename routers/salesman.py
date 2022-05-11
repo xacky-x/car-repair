@@ -175,13 +175,17 @@ async def get_all_projects(skip: int = 0, limit: int = 100, db: Session = Depend
     return projects
 
 
-@router.get("/get_cost")
+@router.get("/get_cost/{r_id}")
 async def get_cost(r_id: int, db: Session = Depends(dependencies.get_db)):
     """获取维修费用"""
     order = crud.get_order_by_rid(db, r_id=r_id)
     cost = 0
+    if not order:   # 没有订单，返回403
+        raise HTTPException(status_code=403, detail="该维修单还未派工！")
     for item in order:
-        if item.status == 1:
+        if item.status == 0:    # 有未完成订单，返回403
+            raise HTTPException(status_code=403,detail="该维修任务未完成！")
+        elif item.status == 1:  # 订单都完成，返回价格
             maintenance = crud.get_m_hour(db, m_id=item.m_id)
             cost += item.hour * maintenance.m_hour  # 所有工时费用
             pm = crud.get_pmaterial_by_pid(db, p_id=item.p_id)

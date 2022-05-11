@@ -130,7 +130,7 @@ def update_cost(db: Session, r_id: int, cost: float):
     db_repair = get_repair_by_id(db, id=r_id)
     db_repair.cost = cost
     db.commit()
-    # return db_repair
+    return
 
 
 def get_project_by_pid(db: Session, p_id: int):
