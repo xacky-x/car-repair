@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from pydantic import BaseModel
 from typing import Optional
 
@@ -25,6 +27,23 @@ class Project(BaseModel):
         orm_mode = True
 
 
+class Repair(BaseModel):
+    r_type: str
+    r_class: str
+    payment: str
+    mileage: float
+    fuel: float
+    approach_time: datetime
+    failure: str
+    completion_time: date
+    date: date
+    v_id: int
+    s_id: int
+
+    class Config:
+        orm_mode = True
+
+
 class Order(BaseModel):
     o_id: int
     r_id: int
@@ -40,3 +59,13 @@ class Order(BaseModel):
 class OrderShow(Order):
     o_maintenance: Maintanence
     o_project: Project
+    o_repair: Repair
+
+
+class UpdateOrder(BaseModel):
+    status: int
+
+    class Config:
+        orm_mode = True
+
+

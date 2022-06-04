@@ -26,13 +26,11 @@ async def get_me(token: str = Depends(utils.oauth2_scheme), db: Session = Depend
     return db
 
 
-@router.get("/get_my_order/{m_id}", response_model=schemas.Order)
+@router.get("/get_my_order/{m_id}", response_model=List[schemas.OrderShow])
 async def get_my_order(m_id: int, db: Session = Depends(dependencies.get_db)):
     """根据id获取自己的派单信息"""
-    db_order = crud.get_my_order(db, id=m_id)
-    if db_order is None:
-        raise HTTPException(status_code=404, detail="无派单")
-    return db_order
+    db_order_list = crud.get_my_order(db, id=m_id)
+    return db_order_list
 
 
 @router.get("/get_repair_by_id/{id}", response_model=schemas.Repair)
@@ -44,11 +42,10 @@ async def get_repair_by_id(id: int, db: Session = Depends(dependencies.get_db)):
     return db_repair
 
 
-@router.put("/update_order_by_oid/{o_id}", response_model=schemas.Order)
-async def update_order_by_oid(o_id: int, order: schemas.OrderCreate, db: Session = Depends(dependencies.get_db)):
+@router.put("/update_order_by_oid/{o_id}")
+async def update_order_by_oid(o_id: int, db: Session = Depends(dependencies.get_db)):
     """更新派工单"""
-    updated_order = crud.update_order_by_oid(db, order=order, o_id=o_id)
-    return updated_order
+    crud.update_order_by_oid_repair(db, o_id=o_id)
 
 
 @router.get("/get_all_projects", response_model=List[schemas.ProjectShow])
