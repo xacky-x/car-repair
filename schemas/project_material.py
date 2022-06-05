@@ -26,3 +26,22 @@ class PmMaterial(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Project_PMaterialShow(BaseModel):
+    p_id: int
+    p_name: str
+
+    class Config:
+        orm_mode = True
+
+
+class PMaterialShow(BaseModel):
+    mt_id: int
+    p_id: int
+    num: int
+    pm_material: Material
+    pm_project: Project_PMaterialShow
+
+    class Config:
+        orm_mode = True

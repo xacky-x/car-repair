@@ -12,7 +12,7 @@ class OrderCreate(BaseModel):
     m_id: int
 
 
-class Maintanence(BaseModel):
+class Maintanence_OrderShow(BaseModel):
     name: str
     m_type: Optional[str] = None
 
@@ -20,14 +20,14 @@ class Maintanence(BaseModel):
         orm_mode = True
 
 
-class Project(BaseModel):
+class Project_OrderShow(BaseModel):
     p_name: str
 
     class Config:
         orm_mode = True
 
 
-class Repair(BaseModel):
+class Repair_OrderShow(BaseModel):
     r_type: str
     r_class: str
     payment: str
@@ -57,9 +57,9 @@ class Order(BaseModel):
 
 
 class OrderShow(Order):
-    o_maintenance: Maintanence
-    o_project: Project
-    o_repair: Repair
+    o_maintenance: Maintanence_OrderShow
+    o_project: Project_OrderShow
+    o_repair: Repair_OrderShow
 
 
 class UpdateOrder(BaseModel):

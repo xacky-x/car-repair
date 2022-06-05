@@ -33,3 +33,28 @@ class Repair(RepairBase):
 
     class Config:
         orm_mode = True
+
+
+class Salesman_RepairShow(BaseModel):
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
+class Vehicle_RepairShow(BaseModel):
+    license: str
+    v_type: str
+    colour: str
+    v_class: str
+
+    class Config:
+        orm_mode = True
+
+
+class RepairShow(Repair):
+    r_salesman: Salesman_RepairShow
+    r_vehicle: Vehicle_RepairShow
+
+    class Config:
+        orm_mode = True

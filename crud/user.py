@@ -355,9 +355,6 @@ def get_pmatertial_by_mtid(db: Session, mt_id: int):
 
 def get_all_pmaterial(db: Session, skip: int = 0, limit: int = 100):
     # 获取所有使用材料单
-    count = db.query(models.PMaterial).count()  # 查询数据库现有的数据量
-    if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
-        limit = count
     return db.query(models.PMaterial).order_by(models.PMaterial.p_id, models.PMaterial.mt_id).offset(
         skip).limit(limit).all()
 

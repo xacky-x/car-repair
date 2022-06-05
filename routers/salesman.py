@@ -94,7 +94,7 @@ async def create_repair(repair: schemas.RepairCreate, db: Session = Depends(depe
     return crud.create_repair(db=db, repair=repair)
 
 
-@router.get("/get_all_repair", response_model=List[schemas.Repair])
+@router.get("/get_all_repair", response_model=List[schemas.RepairShow])
 async def get_all_repair(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修单"""
     all_repair = crud.get_all_repair(db, skip=skip, limit=limit)

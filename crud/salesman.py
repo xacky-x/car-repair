@@ -16,9 +16,6 @@ def get_salesmen(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_all_repair(db: Session, skip: int = 0, limit: int = 100):
-    count = db.query(models.Repair).count()  # 查询数据库现有的数据量
-    if limit > count:  # 若希望查询数据超量，则只返回现有的所有数据
-        limit = count
     return db.query(models.Repair).order_by(models.Repair.r_id).offset(skip).limit(limit).all()
 
 

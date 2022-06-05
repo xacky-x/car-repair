@@ -190,7 +190,7 @@ async def delete_pmaterial(mt_id: int, p_id: int, db: Session = Depends(dependen
         raise HTTPException(status_code=404, detail="该材料不存在")
 
 
-@router.get("/get_all_pmaterial", response_model=List[schemas.PMaterial])
+@router.get("/get_all_pmaterial", response_model=List[schemas.PMaterialShow])
 async def get_all_pmaterial(skip: int = 0, limit: int = 100, db: Session = Depends(dependencies.get_db)):
     """获取所有维修项目"""
     return crud.get_all_pmaterial(db=db, skip=skip, limit=limit)
